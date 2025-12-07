@@ -1,0 +1,1714 @@
+# ===================================================
+# Stash 终极AI工具配置 | Ultimate AI Configuration
+# 专为AI工具、流媒体、广告拦截优化
+# 包含ChatGPT、Gemini、Claude、Midjourney等AI服务完整支持
+# 项目完成日期：2025年6月25日
+# ===================================================
+
+# 📋 首次使用说明：
+# 1. 将本文件保存为 stash-config.yaml
+# 2. 修改下方 "机场订阅" 部分的 URL 为你的机场订阅链接
+# 3. 导入到 Stash 应用中使用
+# 4. 详细使用说明请查看项目 README.md 文件
+#
+# 🚀 核心功能说明：
+# ✅ YouTube去广告：支持PiP画中画，后台播放，拦截所有广告
+# ✅ Spotify会员：部分解锁Premium功能，建议重新登录
+# ✅ Adobe Lightroom：专业修图软件，解锁Premium滤镜
+# ✅ Peak：脑力训练APP，解锁Pro会员功能
+# ✅ Pandora：美国流媒体音乐服务解锁
+#
+# ⚠️ 重要提醒：
+# - 脚本功能需要开启MITM并安装证书
+# - 首次使用建议清除相关App缓存
+# - 部分功能需要重新登录App才能生效
+# - 海外APP需要使用海外节点（YouTube、Spotify、Adobe等）
+# - 国内APP可直连使用（B站等）
+# - 请勿在App内设置超高音质（Spotify）
+
+# 🚀 基础配置 + 网络性能优化
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+ipv6: false
+external-controller: 127.0.0.1:9090
+
+# 网络性能优化配置 - 提升网络速度
+tcp-concurrent: true
+find-process-mode: strict
+geodata-mode: true
+geo-auto-update: true
+geo-update-interval: 24
+
+# 性能优化设置 - 加速网络连接
+unified-delay: false
+connection-test-url: http://www.gstatic.com/generate_204
+
+# DNS配置 - 优化网络速度
+dns:
+  enable: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver:
+    - 223.5.5.5
+    - 114.114.114.114
+    - 8.8.8.8
+  nameserver:
+    - https://dns.alidns.com/dns-query  # 阿里DNS，国内最快
+    - https://doh.pub/dns-query         # 腾讯DNS
+    - https://dns.google/dns-query      # Google DNS
+    - tls://223.5.5.5:853               # 阿里DNS TLS
+    - tls://8.8.8.8:853                 # Google DNS TLS
+  fallback:
+    - https://1.1.1.1/dns-query         # Cloudflare DNS
+    - https://dns.google/dns-query      # Google DNS
+    - tls://1.1.1.1:853                 # Cloudflare DNS TLS
+    - tls://8.8.8.8:853                 # Google DNS TLS
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+      - 0.0.0.0/32
+      - 127.0.0.1/32
+    domain:
+      - '+.google.com'
+      - '+.openai.com'
+      - '+.anthropic.com'
+      - '+.github.com'
+      - '+.discord.com'
+      - '+.twitter.com'
+      - '+.facebook.com'
+
+# 远程代理提供者配置
+# ⚠️ 重要提醒：请替换下方的订阅链接为你自己的机场订阅地址
+proxy-providers:
+  机场订阅:
+    type: http
+    # 🔗 请将下方URL替换为你的机场订阅链接
+    # 格式示例: "https://your-airport-domain.com/api/v1/client/subscribe?token=your-token"
+    url: "请替换为你的机场订阅链接"
+    interval: 600
+    path: ./providers/airport.yaml
+    health-check:
+      enable: true
+      interval: 300
+      url: http://www.gstatic.com/generate_204
+      timeout: 5000
+
+# 代理组配置 - AI工具专业版
+proxy-groups:
+  # === 🚀 核心控制器 ===
+  
+  # 主选择器
+  - name: "🚀 节点选择"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Rocket.png
+    proxies:
+      - "♻️ 自动选择"
+      # 🤖 AI工具分类
+      - "🧠 ChatGPT"
+      - "🌟 Google服务"
+      - "💭 Claude"
+      - "🐦 Grok"
+      - "🔬 AI平台"
+      - "🧰 开发AI"
+      # 📱 热门流媒体应用
+      - "📺 YouTube"
+      - "🎬 Netflix"
+      - "🏰 Disney+"
+      - "📱 TikTok"
+      - "🎵 Spotify"
+      - "🎶 Pandora"
+      # 💬 社交通讯应用
+      - "✈️ Telegram"
+      - "🎨 Midjourney"
+      - "🐦 X平台"
+      - "📘 Facebook"
+      - "📷 Instagram"
+      - "🤖 Reddit"
+      # 🍎 主要平台服务
+      - "🍎 Apple"
+      - "🪟 Microsoft"
+      # 🔧 专业工具
+      - "🐙 GitHub"
+      - "📚 Z-Library"
+      # 🚀 高级功能
+      - "🌍 流媒体解锁"
+      - "🎮 游戏服务"
+      # 🌍 地区节点
+      - "🇺🇸 美国节点"
+      - "🇭🇰 香港节点"
+      - "🇯🇵 日本节点"
+      - "🇰🇷 韩国节点"
+      - "🇸🇬 新加坡节点"
+      - "🇦🇺 澳洲节点"
+      - "🇬🇧 英国节点"
+      - "🇨🇦 加拿大节点"
+      - "🇩🇪 德国节点"
+      - "🇪🇺 欧洲节点"
+      - "🌍 其他地区"
+      - "DIRECT"
+
+  # 自动选择 - 优化延迟算法，提升网络速度
+  - name: "♻️ 自动选择"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Auto.png
+    use:
+      - 机场订阅
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 120
+    tolerance: 20
+    timeout: 3000
+    lazy: true
+
+  # === 🤖 AI工具专用分组 ===
+
+  # ChatGPT & OpenAI 全家桶 - 优化节点优先级
+  - name: "🧠 ChatGPT"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/OpenAI.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：OpenAI服务器位于美国，延迟最低
+      - "🇬🇧 英国节点"      # 备选：欧洲访问速度好
+      - "🇨🇦 加拿大节点"    # 备选：北美地区，稳定性好
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区备用
+      - "♻️ 自动选择"
+
+  # Google统一服务 - AI、搜索、云服务等 (优化版)
+  - name: "🌟 Google服务"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Google.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：AI服务、Flow工具需要美国IP
+      - "🇭🇰 香港节点"      # 备选：亚洲地区低延迟（搜索、邮箱等）
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区稳定
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇨🇦 加拿大节点"    # 备选：北美地区
+      - "♻️ 自动选择"       # 自动测速选择
+
+  # Grok (xAI) - 保留兼容
+  - name: "🐦 Grok"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Bot.png
+    proxies:
+      - "🐦 X平台"
+      - "🇺🇸 美国节点"
+      - "🇬🇧 英国节点"
+      - "🇯🇵 日本节点"
+      - "♻️ 自动选择"
+
+  # Claude AI - 和ChatGPT一样的手动选择格式
+  - name: "💭 Claude"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/ChatGPT.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：Claude服务器位于美国，最佳连接
+      - "🇬🇧 英国节点"      # 备选：欧洲访问速度好
+      - "🇨🇦 加拿大节点"    # 备选：北美地区，稳定性好
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区备用
+      - "♻️ 自动选择"
+
+  # AI综合平台 (优化节点选择)
+  - name: "🔬 AI平台"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Bot.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：大部分AI平台服务器在美国
+      - "🇬🇧 英国节点"      # 备选：欧洲地区访问
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "♻️ 自动选择"
+
+  # 开发AI工具 - 简洁高速选择
+  - name: "🧰 开发AI"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Lab.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：延迟最低
+      - "🇸🇬 新加坡节点"    # 备选：亚洲枢纽
+      - "🇺🇸 美国节点"      # 备选：GitHub总部
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇬🇧 英国节点"      # 备选：欧洲地区
+      - "♻️ 自动选择"
+
+  # === 📱 热门流媒体应用 ===
+
+  # YouTube视频服务 - 简洁高速选择
+  - name: "📺 YouTube"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/YouTube.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：延迟最低，适合4K视频
+      - "🇸🇬 新加坡节点"    # 备选：亚洲CDN节点
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇺🇸 美国节点"      # 备选：原始服务器
+      - "🇬🇧 英国节点"      # 备选：欧洲地区
+      - "♻️ 自动选择"
+
+  # Netflix影视 - 简洁高速选择
+  - name: "🎬 Netflix"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Netflix.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：亚洲延迟低，4K流畅
+      - "🇸🇬 新加坡节点"    # 备选：东南亚CDN
+      - "🇺🇸 美国节点"      # 备选：内容最全
+      - "🇯🇵 日本节点"      # 备选：亚洲内容
+      - "🇬🇧 英国节点"      # 备选：欧洲内容
+      - "♻️ 自动选择"
+
+  # Disney+影视 - 简洁高速选择
+  - name: "🏰 Disney+"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/DisneyPlus.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：亚洲延迟低
+      - "🇸🇬 新加坡节点"    # 备选：东南亚地区
+      - "🇺🇸 美国节点"      # 备选：内容最全
+      - "🇯🇵 日本节点"      # 备选：亚洲内容
+      - "🇬🇧 英国节点"      # 备选：欧洲内容
+      - "♻️ 自动选择"
+
+  # TikTok短视频 - 美国节点优先（香港连接问题修复）
+  - name: "📱 TikTok"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/TikTok.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：TikTok服务器最佳，连接稳定
+      - "🇸🇬 新加坡节点"    # 备选：亚洲枢纽，速度快
+      - "🇯🇵 日本节点"      # 备选：亚洲地区，内容丰富
+      - "🇰🇷 韩国节点"      # 备选：亚洲地区，韩流内容
+      - "🇬🇧 英国节点"      # 备选：欧洲地区
+      - "♻️ 自动选择"
+
+  # Spotify音乐 - 简洁高速选择
+  - name: "🎵 Spotify"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Spotify.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：延迟最低，音乐流畅
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区
+      - "🇺🇸 美国节点"      # 备选：原始服务器
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇬🇧 英国节点"      # 备选：欧洲地区
+      - "♻️ 自动选择"
+
+  # Pandora音乐 - 优化选择（北美地区专用）
+  - name: "🎶 Pandora"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Pandora.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：Pandora官方支持地区
+      - "🇨🇦 加拿大节点"    # 备选：北美地区，部分支持
+      - "♻️ 自动选择"       # 自动选择最快节点
+
+  # === 💬 社交通讯应用 ===
+
+  # Telegram通讯 - 根据延迟测试优化（延迟敏感）
+  - name: "✈️ Telegram"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Telegram.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：延迟最低53ms
+      - "♻️ 自动选择"       # 备选：自动选择58ms
+      - "🇸🇬 新加坡节点"    # 备选：108ms
+      - "🇯🇵 日本节点"      # 备选：126ms
+      - "🇰🇷 韩国节点"      # 备选：亚洲地区
+      - "🇺🇸 美国节点"      # 备选：稳定性好但延迟高292ms
+      - "🇩🇪 德国节点"      # 备选：欧洲地区
+
+  # 🎨 Midjourney & Discord - 简洁高速选择
+  - name: "🎨 Midjourney"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Lab.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：Discord服务器位置
+      - "🇭🇰 香港节点"      # 备选：延迟最低
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇬🇧 英国节点"      # 备选：欧洲地区
+      - "♻️ 自动选择"
+
+  # X (Twitter) & Grok - 简洁高速选择
+  - name: "🐦 X平台"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Twitter.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：延迟最低
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区
+      - "🇺🇸 美国节点"      # 备选：原始服务器
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇬🇧 英国节点"      # 备选：欧洲地区
+      - "♻️ 自动选择"
+
+  # Facebook & Meta - 简洁高速选择
+  - name: "📘 Facebook"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Facebook.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：延迟最低
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区
+      - "🇺🇸 美国节点"      # 备选：原始服务器
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇬🇧 英国节点"      # 备选：欧洲地区
+      - "♻️ 自动选择"
+
+  # Instagram - 简洁高速选择
+  - name: "📷 Instagram"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Instagram.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：延迟最低，图片快速加载
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区
+      - "🇺🇸 美国节点"      # 备选：原始服务器
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇬🇧 英国节点"      # 备选：欧洲地区
+      - "♻️ 自动选择"
+
+  # Reddit社区 - 简洁高速选择
+  - name: "🤖 Reddit"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Reddit.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：延迟最低
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区
+      - "🇺🇸 美国节点"      # 备选：原始服务器
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇬🇧 英国节点"      # 备选：欧洲地区
+      - "♻️ 自动选择"
+
+  # === 🍎 主要平台服务 ===
+
+  # Apple服务 - 优化地区选择
+  - name: "🍎 Apple"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Apple.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：美区App Store，内容最全
+      - "🇭🇰 香港节点"      # 备选：港区服务，延迟低
+      - "🇯🇵 日本节点"      # 备选：日区服务，游戏应用多
+      - "🇸🇬 新加坡节点"    # 备选：新区服务
+      - "DIRECT"            # 备选：国行设备
+      - "♻️ 自动选择"
+
+  # Microsoft服务 - 优化选择
+  - name: "🪟 Microsoft"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Microsoft.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：主要服务器，Office 365
+      - "🇭🇰 香港节点"      # 备选：亚洲服务，延迟低
+      - "🇸🇬 新加坡节点"    # 备选：亚洲地区
+      - "🇯🇵 日本节点"      # 备选：亚洲服务
+      - "♻️ 自动选择"
+
+  # === 🔧 专业工具 ===
+
+  # GitHub开发平台 - 优化选择
+  - name: "🐙 GitHub"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/GitHub.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：GitHub总部，访问速度最快
+      - "🇸🇬 新加坡节点"    # 备选：亚洲CDN节点
+      - "🇯🇵 日本节点"      # 备选：亚洲地区
+      - "🇭🇰 香港节点"      # 备选：低延迟
+      - "♻️ 自动选择"
+
+  # Z-Library数字图书馆 - 优化地区覆盖
+  - name: "📚 Z-Library"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Lab.png
+    proxies:
+      - "🇺🇸 美国节点"      # 首选：主要服务器
+      - "🇬🇧 英国节点"      # 备选：欧洲服务器，版权友好
+      - "🇩🇪 德国节点"      # 备选：欧洲服务器
+      - "🇸🇬 新加坡节点"    # 备选：亚洲服务器
+      - "🇯🇵 日本节点"      # 备选：亚洲服务器
+      - "♻️ 自动选择"
+
+  # === 🚀 高级功能分组 ===
+
+  # 流媒体解锁（全球）- 网速优先自动测速，优化网络速度
+  - name: "🌍 流媒体解锁"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Streaming.png
+    use:
+      - 机场订阅
+    filter: "(?i)(美|美国|美利坚|US|USA|America|United States|UnitedStates|洛杉矶|LA|纽约|NY|旧金山|SF|San Francisco|Chicago|Seattle|Miami|Dallas|Atlanta|Phoenix|Boston|Washington|DC|日|日本|JP|Japan|Tokyo|大阪|Osaka|名古屋|Nagoya|横滨|Yokohama|福冈|Fukuoka|JPN|韩|韩国|KR|Korea|Seoul|首尔|KOR|港|香港|HK|Hong Kong|HongKong|Hongkong|HKG|新|新加坡|SG|Singapore|SGP|SIN|英|英国|UK|United Kingdom|Britain|London|伦敦|Manchester|曼彻斯特|Birmingham|伯明翰|GBR|GB|澳|澳大利亚|澳洲|AU|Australia|Sydney|悉尼|Melbourne|墨尔本|Brisbane|布里斯班|Perth|珀斯|AUS)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 100
+    tolerance: 15
+    timeout: 3000
+    lazy: true
+
+  # 游戏服务（全球游戏加速）- 优化延迟优先级
+  - name: "🎮 游戏服务"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Game.png
+    proxies:
+      - "🇭🇰 香港节点"      # 首选：延迟最低
+      - "🇸🇬 新加坡节点"    # 备选：亚洲枢纽
+      - "🇯🇵 日本节点"      # 备选：游戏服务器多
+      - "🇰🇷 韩国节点"      # 备选：电竞强国
+      - "🇺🇸 美国节点"      # 备选：全球服务器
+      - "♻️ 自动选择"
+
+  # === 🏠 国内服务分组 ===
+
+  # 🔧 工具应用（国内工具专用）
+  - name: "🔧 工具应用"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Static.png
+    proxies:
+      - "DIRECT"
+      - "🇭🇰 香港节点"
+      - "🇯🇵 日本节点"
+      - "♻️ 自动选择"
+
+  # 🏠 国内网站（全部直连）
+  - name: "🏠 国内网站"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/CN.png
+    proxies:
+      - "DIRECT"
+
+  # === 🌍 地区节点分组 ===
+
+  # 🇺🇸 美国节点 - 更新过滤规则，优化网络速度
+  - name: "🇺🇸 美国节点"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/US.png
+    use:
+      - 机场订阅
+    filter: "(?i)(美|美国|美利坚|US|USA|America|United States|UnitedStates|洛杉矶|LA|纽约|NY|旧金山|SF|San Francisco|Chicago|Seattle|Miami|Dallas|Atlanta|Phoenix|Boston|Washington|DC)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 150
+    tolerance: 25
+    timeout: 3000
+    lazy: true
+
+  # 🇭🇰 香港节点 - 更新过滤规则，优化网络速度（延迟最低）
+  - name: "🇭🇰 香港节点"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/HK.png
+    use:
+      - 机场订阅
+    filter: "(?i)(港|香港|HK|Hong Kong|HongKong|Hongkong|HKG)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 120
+    tolerance: 20
+    timeout: 3000
+    lazy: true
+
+  # 🇯🇵 日本节点 - 更新过滤规则，优化网络速度
+  - name: "🇯🇵 日本节点"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/JP.png
+    use:
+      - 机场订阅
+    filter: "(?i)(日|日本|JP|Japan|Tokyo|大阪|Osaka|名古屋|Nagoya|横滨|Yokohama|福冈|Fukuoka|JPN)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 150
+    tolerance: 25
+    timeout: 3000
+    lazy: true
+
+  # 🇰🇷 韩国节点 - 更新过滤规则，优化网络速度
+  - name: "🇰🇷 韩国节点"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/KR.png
+    use:
+      - 机场订阅
+    filter: "(?i)(韩|韩国|KR|Korea|Seoul|首尔|KOR)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 150
+    tolerance: 25
+    timeout: 3000
+    lazy: true
+
+  # 🇸🇬 新加坡节点 - 更新过滤规则，优化网络速度
+  - name: "🇸🇬 新加坡节点"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/SG.png
+    use:
+      - 机场订阅
+    filter: "(?i)(新|新加坡|SG|Singapore|SGP|SIN)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 150
+    tolerance: 25
+    timeout: 3000
+    lazy: true
+
+  # 🇦🇺 澳洲节点 - 更新过滤规则，优化网络速度
+  - name: "🇦🇺 澳洲节点"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/AU.png
+    use:
+      - 机场订阅
+    filter: "(?i)(澳|澳大利亚|澳洲|AU|Australia|Sydney|悉尼|Melbourne|墨尔本|Brisbane|布里斯班|Perth|珀斯|AUS)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 200
+    tolerance: 35
+    timeout: 5000
+    lazy: true
+
+  # 🇬🇧 英国节点 - 更新过滤规则，优化网络速度
+  - name: "🇬🇧 英国节点"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/UK.png
+    use:
+      - 机场订阅
+    filter: "(?i)(英|英国|UK|United Kingdom|Britain|London|伦敦|Manchester|曼彻斯特|Birmingham|伯明翰|GBR|GB)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 180
+    tolerance: 30
+    timeout: 5000
+    lazy: true
+
+  # 🇨🇦 加拿大节点 - 更新过滤规则，优化网络速度
+  - name: "🇨🇦 加拿大节点"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/CA.png
+    use:
+      - 机场订阅
+    filter: "(?i)(加|加拿大|CA|Canada|Toronto|多伦多|Vancouver|温哥华|Montreal|蒙特利尔|Ottawa|渥太华|CAN)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 180
+    tolerance: 30
+    timeout: 5000
+    lazy: true
+
+  # 🇩🇪 德国节点 - 更新过滤规则，优化网络速度
+  - name: "🇩🇪 德国节点"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/DE.png
+    use:
+      - 机场订阅
+    filter: "(?i)(德|德国|DE|Germany|Berlin|柏林|Munich|慕尼黑|Frankfurt|法兰克福|Hamburg|汉堡|DEU)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 200
+    tolerance: 30
+    timeout: 5000
+    lazy: true
+
+  # 🇪🇺 欧洲节点 - 更新过滤规则，优化网络速度
+  - name: "🇪🇺 欧洲节点"
+    type: url-test
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/EU.png
+    use:
+      - 机场订阅
+    filter: "(?i)(欧|欧洲|EU|Europe|法国|FR|France|Paris|巴黎|意大利|IT|Italy|Rome|罗马|Milan|米兰|西班牙|ES|Spain|Madrid|马德里|Barcelona|巴塞罗那|荷兰|NL|Netherlands|Amsterdam|阿姆斯特丹|瑞士|CH|Switzerland|Zurich|苏黎世|奥地利|AT|Austria|Vienna|维也纳|比利时|BE|Belgium|Brussels|布鲁塞尔|丹麦|DK|Denmark|Copenhagen|哥本哈根|芬兰|FI|Finland|Helsinki|赫尔辛基|挪威|NO|Norway|Oslo|奥斯陆|瑞典|SE|Sweden|Stockholm|斯德哥尔摩|波兰|PL|Poland|Warsaw|华沙|捷克|CZ|Czech|Prague|布拉格|匈牙利|HU|Hungary|Budapest|布达佩斯|葡萄牙|PT|Portugal|Lisbon|里斯本|希腊|GR|Greece|Athens|雅典|爱尔兰|IE|Ireland|Dublin|都柏林)"
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 220
+    tolerance: 35
+    timeout: 5000
+    lazy: true
+
+  # 🌍 其他地区 - 更新过滤规则
+  - name: "🌍 其他地区"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/UN.png
+    use:
+      - 机场订阅
+    filter: "^((?!美|美国|美利坚|US|USA|America|United States|UnitedStates|洛杉矶|LA|纽约|NY|旧金山|SF|San Francisco|Chicago|Seattle|Miami|Dallas|Atlanta|Phoenix|Boston|Washington|DC|港|香港|HK|Hong Kong|HongKong|Hongkong|HKG|日|日本|JP|Japan|Tokyo|大阪|Osaka|名古屋|Nagoya|横滨|Yokohama|福冈|Fukuoka|JPN|韩|韩国|KR|Korea|Seoul|首尔|KOR|新|新加坡|SG|Singapore|SGP|SIN|澳|澳大利亚|澳洲|AU|Australia|Sydney|悉尼|Melbourne|墨尔本|Brisbane|布里斯班|Perth|珀斯|AUS|英|英国|UK|United Kingdom|Britain|London|伦敦|Manchester|曼彻斯特|Birmingham|伯明翰|GBR|GB|加|加拿大|CA|Canada|Toronto|多伦多|Vancouver|温哥华|Montreal|蒙特利尔|Ottawa|渥太华|CAN|德|德国|DE|Germany|Berlin|柏林|Munich|慕尼黑|Frankfurt|法兰克福|Hamburg|汉堡|DEU|欧|欧洲|EU|Europe|法国|FR|France|Paris|巴黎|意大利|IT|Italy|Rome|罗马|Milan|米兰|西班牙|ES|Spain|Madrid|马德里|Barcelona|巴塞罗那|荷兰|NL|Netherlands|Amsterdam|阿姆斯特丹|瑞士|CH|Switzerland|Zurich|苏黎世|奥地利|AT|Austria|Vienna|维也纳|比利时|BE|Belgium|Brussels|布鲁塞尔|丹麦|DK|Denmark|Copenhagen|哥本哈根|芬兰|FI|Finland|Helsinki|赫尔辛基|挪威|NO|Norway|Oslo|奥斯陆|瑞典|SE|Sweden|Stockholm|斯德哥尔摩|波兰|PL|Poland|Warsaw|华沙|捷克|CZ|Czech|Prague|布拉格|匈牙利|HU|Hungary|Budapest|布达佩斯|葡萄牙|PT|Portugal|希腊|GR|Greece|爱尔兰|IE|Ireland).)*$"
+
+  # === 🐟 兜底规则 ===
+
+  # Final兜底策略
+  - name: "🐟 Final"
+    type: select
+    icon: https://raw.githubusercontent.com/michaelyufeng/stash-ai-config/main/icons/Final.png
+    proxies:
+      - "♻️ 自动选择"
+      - "🚀 节点选择"
+      - "DIRECT"
+
+# ===== 🌐 规则配置 =====
+rules:
+  # === AI工具平台规则 ===
+
+  # ChatGPT & OpenAI 全家桶
+  - DOMAIN-SUFFIX,openai.com,🧠 ChatGPT
+  - DOMAIN-SUFFIX,openaiapi.com,🧠 ChatGPT
+  - DOMAIN-SUFFIX,chatgpt.com,🧠 ChatGPT
+  - DOMAIN-SUFFIX,oaistatic.com,🧠 ChatGPT
+  - DOMAIN-SUFFIX,oaiusercontent.com,🧠 ChatGPT
+  - DOMAIN-SUFFIX,auth0.com,🧠 ChatGPT
+
+  # Google统一服务 (AI优先级：bard/gemini -> 搜索/邮箱 -> 云服务)
+  - DOMAIN-SUFFIX,bard.google.com,🌟 Google服务
+  - DOMAIN-SUFFIX,gemini.google.com,🌟 Google服务
+  - DOMAIN-KEYWORD,gemini,🌟 Google服务
+  - DOMAIN-KEYWORD,bard,🌟 Google服务
+  - DOMAIN-SUFFIX,google.com,🌟 Google服务
+  - DOMAIN-SUFFIX,googleapis.com,🌟 Google服务
+  - DOMAIN-SUFFIX,googleusercontent.com,🌟 Google服务
+  - DOMAIN-SUFFIX,gstatic.com,🌟 Google服务
+  - DOMAIN-SUFFIX,gmail.com,🌟 Google服务
+  - DOMAIN-SUFFIX,googlemail.com,🌟 Google服务
+  - DOMAIN-SUFFIX,googledrive.com,🌟 Google服务
+  - DOMAIN-SUFFIX,googlecloud.com,🌟 Google服务
+  - DOMAIN-SUFFIX,gcp.com,🌟 Google服务
+  - DOMAIN-SUFFIX,gcr.io,🌟 Google服务
+  - DOMAIN-SUFFIX,googletagmanager.com,🌟 Google服务
+  - DOMAIN-SUFFIX,googleanalytics.com,🌟 Google服务
+  - DOMAIN-SUFFIX,googlesyndication.com,🌟 Google服务
+  - DOMAIN-SUFFIX,doubleclick.net,🌟 Google服务
+  - DOMAIN-SUFFIX,adsystem.google.com,🌟 Google服务
+
+  # Claude & Anthropic - 专用代理组
+  - DOMAIN-SUFFIX,anthropic.com,💭 Claude
+  - DOMAIN-SUFFIX,claude.ai,💭 Claude
+
+  # Grok (xAI) - 专用代理组
+  - DOMAIN-SUFFIX,x.ai,🐦 X平台
+  - DOMAIN-SUFFIX,grok.x.ai,🐦 X平台
+
+  # AI综合平台
+  - DOMAIN-SUFFIX,perplexity.ai,🔬 AI平台
+  - DOMAIN-SUFFIX,huggingface.co,🔬 AI平台
+  - DOMAIN-SUFFIX,replicate.com,🔬 AI平台
+  - DOMAIN-SUFFIX,poe.com,🔬 AI平台
+  - DOMAIN-SUFFIX,character.ai,🔬 AI平台
+  - DOMAIN-SUFFIX,janitorai.com,🔬 AI平台
+  - DOMAIN-SUFFIX,civitai.com,🔬 AI平台
+  - DOMAIN-SUFFIX,leonardo.ai,🔬 AI平台
+
+  # Midjourney & Discord - 专用代理组
+  - DOMAIN-SUFFIX,midjourney.com,🎨 Midjourney
+  - DOMAIN-SUFFIX,discord.com,🎨 Midjourney
+  - DOMAIN-SUFFIX,discordapp.com,🎨 Midjourney
+  - DOMAIN-SUFFIX,discord.gg,🎨 Midjourney
+
+  # 开发AI工具 - 专用代理组
+  - DOMAIN-SUFFIX,cursor.sh,🧰 开发AI
+  - DOMAIN-SUFFIX,cursor.com,🧰 开发AI
+  - DOMAIN-SUFFIX,github.com,🐙 GitHub
+  - DOMAIN-SUFFIX,githubusercontent.com,🐙 GitHub
+  - DOMAIN-SUFFIX,githubassets.com,🐙 GitHub
+  - DOMAIN-SUFFIX,github.io,🐙 GitHub
+
+  # === 主要功能规则 ===
+
+  # Z-Library数字图书馆 - 专用代理组
+  - DOMAIN-SUFFIX,z-lib.org,📚 Z-Library
+  - DOMAIN-SUFFIX,1lib.org,📚 Z-Library
+  - DOMAIN-SUFFIX,zlibrary.to,📚 Z-Library
+  - DOMAIN-SUFFIX,singlelogin.org,📚 Z-Library
+  - DOMAIN-SUFFIX,b-ok.org,📚 Z-Library
+
+  # === 流媒体和社交应用规则 ===
+
+  # YouTube Premium - 专用代理组，自动测速最快节点
+  - DOMAIN-SUFFIX,youtube.com,📺 YouTube
+  - DOMAIN-SUFFIX,youtubei.googleapis.com,📺 YouTube
+  - DOMAIN-SUFFIX,googlevideo.com,📺 YouTube
+  - DOMAIN-SUFFIX,ytimg.com,📺 YouTube
+  - DOMAIN-SUFFIX,ggpht.com,📺 YouTube
+
+  # Netflix - 专用代理组，支持多地区内容
+  - DOMAIN-SUFFIX,netflix.com,🎬 Netflix
+  - DOMAIN-SUFFIX,nflximg.com,🎬 Netflix
+  - DOMAIN-SUFFIX,nflxext.com,🎬 Netflix
+  - DOMAIN-SUFFIX,nflxso.net,🎬 Netflix
+  - DOMAIN-SUFFIX,nflxvideo.net,🎬 Netflix
+
+  # Disney+ - 专用代理组，支持多地区内容
+  - DOMAIN-SUFFIX,disneyplus.com,🏰 Disney+
+  - DOMAIN-SUFFIX,disney-plus.net,🏰 Disney+
+  - DOMAIN-SUFFIX,disneystreaming.com,🏰 Disney+
+  - DOMAIN-SUFFIX,dssott.com,🏰 Disney+
+
+  # TikTok - 专用代理组，完整域名支持（修复无网络连接问题）
+  - DOMAIN-SUFFIX,tiktok.com,📱 TikTok
+  - DOMAIN-SUFFIX,tiktokcdn.com,📱 TikTok
+  - DOMAIN-SUFFIX,tiktokv.com,📱 TikTok
+  - DOMAIN-SUFFIX,musical.ly,📱 TikTok
+  - DOMAIN-SUFFIX,byteoversea.com,📱 TikTok
+  - DOMAIN-SUFFIX,tik-tokapi.com,📱 TikTok
+  - DOMAIN-SUFFIX,bytedance.com,📱 TikTok
+  - DOMAIN-SUFFIX,byteimg.com,📱 TikTok
+  - DOMAIN-SUFFIX,ibytedtos.com,📱 TikTok
+  - DOMAIN-SUFFIX,ibyteimg.com,📱 TikTok
+  - DOMAIN-SUFFIX,ipstatp.com,📱 TikTok
+  - DOMAIN-SUFFIX,muscdn.com,📱 TikTok
+  - DOMAIN-SUFFIX,sgpstatp.com,📱 TikTok
+  - DOMAIN-SUFFIX,snssdk.com,📱 TikTok
+  - DOMAIN-SUFFIX,amemv.com,📱 TikTok
+  - DOMAIN-SUFFIX,bdxiguaimg.com,📱 TikTok
+  - DOMAIN-SUFFIX,bdxiguastatic.com,📱 TikTok
+  - DOMAIN-SUFFIX,byteacctimg.com,📱 TikTok
+  - DOMAIN-SUFFIX,bytescm.com,📱 TikTok
+  - DOMAIN-SUFFIX,bytegoofy.com,📱 TikTok
+  - DOMAIN-SUFFIX,bytetos.com,📱 TikTok
+  - DOMAIN-SUFFIX,feelgood.cn,📱 TikTok
+  - DOMAIN-SUFFIX,feiliao.com,📱 TikTok
+  - DOMAIN-SUFFIX,flipagram.com,📱 TikTok
+  - DOMAIN-SUFFIX,hypstarcdn.com,📱 TikTok
+  - DOMAIN-SUFFIX,iesdouyin.com,📱 TikTok
+  - DOMAIN-SUFFIX,ixiguavideo.com,📱 TikTok
+  - DOMAIN-SUFFIX,kamerahd.com,📱 TikTok
+  - DOMAIN-SUFFIX,mmstat.com,📱 TikTok
+  - DOMAIN-SUFFIX,musemuse.cn,📱 TikTok
+  - DOMAIN-SUFFIX,musical.ly,📱 TikTok
+  - DOMAIN-SUFFIX,pstatp.com,📱 TikTok
+  - DOMAIN-SUFFIX,snssdk.com,📱 TikTok
+  - DOMAIN-SUFFIX,tiktokcdn-us.com,📱 TikTok
+  - DOMAIN-SUFFIX,ttlivecdn.com,📱 TikTok
+  - DOMAIN-SUFFIX,vigo.ws,📱 TikTok
+  - DOMAIN-SUFFIX,videozhishi.com,📱 TikTok
+  - DOMAIN-SUFFIX,volccdn.com,📱 TikTok
+  - DOMAIN-KEYWORD,tiktok,📱 TikTok
+  - DOMAIN-KEYWORD,musical.ly,📱 TikTok
+  - DOMAIN-KEYWORD,bytedance,📱 TikTok
+
+  # Spotify - 专用代理组，自动测速最快节点
+  - DOMAIN-SUFFIX,spotify.com,🎵 Spotify
+  - DOMAIN-SUFFIX,scdn.co,🎵 Spotify
+  - DOMAIN-SUFFIX,spoti.fi,🎵 Spotify
+
+  # X (Twitter) & Grok - 专用代理组
+  - DOMAIN-SUFFIX,twitter.com,🐦 X平台
+  - DOMAIN-SUFFIX,x.com,🐦 X平台
+  - DOMAIN-SUFFIX,twimg.com,🐦 X平台
+  - DOMAIN-SUFFIX,t.co,🐦 X平台
+
+  # Facebook & Meta - 专用代理组
+  - DOMAIN-SUFFIX,facebook.com,📘 Facebook
+  - DOMAIN-SUFFIX,fb.com,📘 Facebook
+  - DOMAIN-SUFFIX,fbcdn.net,📘 Facebook
+  - DOMAIN-SUFFIX,meta.com,📘 Facebook
+
+  # Instagram - 专用代理组
+  - DOMAIN-SUFFIX,instagram.com,📷 Instagram
+  - DOMAIN-SUFFIX,cdninstagram.com,📷 Instagram
+
+  # Reddit - 专用代理组
+  - DOMAIN-SUFFIX,reddit.com,🤖 Reddit
+  - DOMAIN-SUFFIX,redd.it,🤖 Reddit
+  - DOMAIN-SUFFIX,redditstatic.com,🤖 Reddit
+
+  # Telegram - 专用代理组（域名+IP段优化）
+  - DOMAIN-SUFFIX,telegram.org,✈️ Telegram
+  - DOMAIN-SUFFIX,t.me,✈️ Telegram
+  - DOMAIN-SUFFIX,telegra.ph,✈️ Telegram
+  - DOMAIN-SUFFIX,telegram.me,✈️ Telegram
+  - DOMAIN-SUFFIX,telesco.pe,✈️ Telegram
+  - DOMAIN-SUFFIX,tdesktop.com,✈️ Telegram
+  
+  # Telegram IP段（解决连接卡顿问题）
+  - IP-CIDR,91.108.4.0/22,✈️ Telegram
+  - IP-CIDR,91.108.8.0/22,✈️ Telegram
+  - IP-CIDR,91.108.12.0/22,✈️ Telegram
+  - IP-CIDR,91.108.16.0/22,✈️ Telegram
+  - IP-CIDR,91.108.20.0/22,✈️ Telegram
+  - IP-CIDR,91.108.56.0/22,✈️ Telegram
+  - IP-CIDR,149.154.160.0/20,✈️ Telegram
+  - IP-CIDR,185.76.151.0/24,✈️ Telegram
+  - IP-CIDR6,2001:b28:f23d::/48,✈️ Telegram
+  - IP-CIDR6,2001:b28:f23f::/48,✈️ Telegram
+  - IP-CIDR6,2001:67c:4e8::/48,✈️ Telegram
+
+  # === 主要平台服务规则 ===
+
+  # Apple服务 - 专用代理组
+  - DOMAIN-SUFFIX,apple.com,🍎 Apple
+  - DOMAIN-SUFFIX,icloud.com,🍎 Apple
+  - DOMAIN-SUFFIX,itunes.apple.com,🍎 Apple
+  - DOMAIN-SUFFIX,apps.apple.com,🍎 Apple
+  - DOMAIN-SUFFIX,tv.apple.com,🍎 Apple
+
+  # Microsoft服务 - 专用代理组
+  - DOMAIN-SUFFIX,microsoft.com,🪟 Microsoft
+  - DOMAIN-SUFFIX,microsoftonline.com,🪟 Microsoft
+  - DOMAIN-SUFFIX,office.com,🪟 Microsoft
+  - DOMAIN-SUFFIX,office365.com,🪟 Microsoft
+  - DOMAIN-SUFFIX,outlook.com,🪟 Microsoft
+  - DOMAIN-SUFFIX,live.com,🪟 Microsoft
+  - DOMAIN-SUFFIX,xbox.com,🪟 Microsoft
+  - DOMAIN-SUFFIX,xboxlive.com,🪟 Microsoft
+
+  # === 其他流媒体规则 ===
+
+  # Amazon Prime Video
+  - DOMAIN-SUFFIX,primevideo.com,🌍 流媒体解锁
+  - DOMAIN-SUFFIX,amazonvideo.com,🌍 流媒体解锁
+  - DOMAIN-SUFFIX,media-amazon.com,🌍 流媒体解锁
+
+  # HBO Max
+  - DOMAIN-SUFFIX,hbomax.com,🌍 流媒体解锁
+  - DOMAIN-SUFFIX,hbogo.com,🌍 流媒体解锁
+  - DOMAIN-SUFFIX,hbonow.com,🌍 流媒体解锁
+
+  # Pandora流媒体 - 完整域名支持（提高连接成功率）
+  - DOMAIN-SUFFIX,pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,tuner.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,t.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,www.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,audio-dc.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,audio-sjl.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,audio-sv5.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,audio.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,www.p-cdn.com,🎶 Pandora
+  - DOMAIN-SUFFIX,p-cdn.com,🎶 Pandora
+  - DOMAIN-SUFFIX,pandora-native.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,stats.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,api.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,access.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,mediaserver-cont-dc6-1-v4v6.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,mediaserver-cont-sjl-1-v4v6.pandora.com,🎶 Pandora
+  - DOMAIN-SUFFIX,mediaserver-cont-sv5-1-v4v6.pandora.com,🎶 Pandora
+  - DOMAIN-KEYWORD,pandora,🎶 Pandora
+
+  # === 游戏平台规则 ===
+
+  # Steam平台
+  - DOMAIN-SUFFIX,steampowered.com,🎮 游戏服务
+  - DOMAIN-SUFFIX,steamcommunity.com,🎮 游戏服务
+  - DOMAIN-SUFFIX,steamstatic.com,🎮 游戏服务
+  - DOMAIN-SUFFIX,steamcdn-a.akamaihd.net,🎮 游戏服务
+  - DOMAIN-SUFFIX,steamuserimages-a.akamaihd.net,🎮 游戏服务
+
+  # Epic Games
+  - DOMAIN-SUFFIX,epicgames.com,🎮 游戏服务
+  - DOMAIN-SUFFIX,epicgames.dev,🎮 游戏服务
+  - DOMAIN-SUFFIX,unrealengine.com,🎮 游戏服务
+
+  # PlayStation
+  - DOMAIN-SUFFIX,playstation.com,🎮 游戏服务
+  - DOMAIN-SUFFIX,sony.com,🎮 游戏服务
+
+  # 任天堂
+  - DOMAIN-SUFFIX,nintendo.com,🎮 游戏服务
+  - DOMAIN-SUFFIX,nintendo.net,🎮 游戏服务
+
+  # 王者荣耀
+  - DOMAIN-SUFFIX,pvp.qq.com,🎮 游戏服务
+
+  # === 专业工具规则 ===
+
+  # NotebookLM
+  - DOMAIN-SUFFIX,notebooklm.google.com,🌟 Google服务
+
+  # Copilot
+  - DOMAIN-SUFFIX,copilot.microsoft.com,🧰 开发AI
+
+  # === 国内工具应用规则 ===
+
+  # 钉钉办公
+  - DOMAIN-SUFFIX,dingtalk.com,🔧 工具应用
+  - DOMAIN-SUFFIX,alicdn.com,🔧 工具应用
+
+  # 腾讯会议
+  - DOMAIN-SUFFIX,voovmeeting.com,🔧 工具应用
+  - DOMAIN-SUFFIX,tencent-cloud.net,🔧 工具应用
+
+  # 飞书
+  - DOMAIN-SUFFIX,feishu.cn,🔧 工具应用
+  - DOMAIN-SUFFIX,larksuite.com,🔧 工具应用
+
+  # VR虚拟现实
+  - DOMAIN-SUFFIX,vrhouse.com,🔧 工具应用
+
+  # B站（哔哩哔哩）- 改为国内直连
+  - DOMAIN,app.bilibili.com,🏠 国内网站
+  - DOMAIN,api.bilibili.com,🏠 国内网站
+  - DOMAIN,api.live.bilibili.com,🏠 国内网站
+  - DOMAIN,api.vc.bilibili.com,🏠 国内网站
+  - DOMAIN,manga.bilibili.com,🏠 国内网站
+  - DOMAIN-SUFFIX,bilibili.com,🏠 国内网站
+  - DOMAIN-SUFFIX,hdslb.com,🏠 国内网站
+  - DOMAIN-SUFFIX,biliapi.net,🏠 国内网站
+
+  # === 国内AI服务规则 ===
+
+  # DeepSeek深度求索
+  - DOMAIN-SUFFIX,deepseek.com,🏠 国内网站
+  - DOMAIN-SUFFIX,deepseek.ai,🏠 国内网站
+
+  # 通义千问
+  - DOMAIN-SUFFIX,tongyi.aliyun.com,🏠 国内网站
+  - DOMAIN-SUFFIX,qianwen.aliyun.com,🏠 国内网站
+
+  # 即梦AI
+  - DOMAIN-SUFFIX,jimeng.jianying.com,🏠 国内网站
+
+  # 海螺AI
+  - DOMAIN-SUFFIX,hailuoai.com,🏠 国内网站
+
+  # 百度网盘
+  - DOMAIN-SUFFIX,pan.baidu.com,🏠 国内网站
+  - DOMAIN-SUFFIX,baidupcs.com,🏠 国内网站
+
+  # === 国内服务规则 ===
+
+  # 电商平台
+  - DOMAIN-SUFFIX,taobao.com,🏠 国内网站
+  - DOMAIN-SUFFIX,tmall.com,🏠 国内网站
+  - DOMAIN-SUFFIX,jd.com,🏠 国内网站
+  - DOMAIN-SUFFIX,jd.hk,🏠 国内网站
+  - DOMAIN-SUFFIX,360buyimg.com,🏠 国内网站
+  - DOMAIN-SUFFIX,pinduoduo.com,🏠 国内网站
+  - DOMAIN-SUFFIX,yangkeduo.com,🏠 国内网站
+  - DOMAIN-SUFFIX,pddpic.com,🏠 国内网站
+
+  # 阿里巴巴生态
+  - DOMAIN-SUFFIX,alibaba.com,🏠 国内网站
+  - DOMAIN-SUFFIX,alibabacloud.com,🏠 国内网站
+  - DOMAIN-SUFFIX,aliyun.com,🏠 国内网站
+  - DOMAIN-SUFFIX,alipay.com,🏠 国内网站
+  - DOMAIN-SUFFIX,alimama.com,🏠 国内网站
+
+  # 腾讯生态
+  - DOMAIN-SUFFIX,qq.com,🏠 国内网站
+  - DOMAIN-SUFFIX,tencent.com,🏠 国内网站
+  - DOMAIN-SUFFIX,qcloud.com,🏠 国内网站
+  - DOMAIN-SUFFIX,gtimg.com,🏠 国内网站
+  - DOMAIN-SUFFIX,wechat.com,🏠 国内网站
+  - DOMAIN-SUFFIX,weixin.qq.com,🏠 国内网站
+
+  # 百度生态
+  - DOMAIN-SUFFIX,baidu.com,🏠 国内网站
+  - DOMAIN-SUFFIX,bdstatic.com,🏠 国内网站
+  - DOMAIN-SUFFIX,bcebos.com,🏠 国内网站
+
+  # 新浪微博 - 直连
+  - DOMAIN-SUFFIX,weibo.com,🏠 国内网站
+  - DOMAIN-SUFFIX,weibo.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,weibocdn.com,🏠 国内网站
+
+  # 知乎 - 直连
+  - DOMAIN-SUFFIX,zhihu.com,🏠 国内网站
+  - DOMAIN-SUFFIX,zhimg.com,🏠 国内网站
+
+  # 小红书 - 直连
+  - DOMAIN-SUFFIX,xiaohongshu.com,🏠 国内网站
+  - DOMAIN-SUFFIX,xhscdn.com,🏠 国内网站
+
+  # 抖音系列
+  - DOMAIN-SUFFIX,douyin.com,🏠 国内网站
+  - DOMAIN-SUFFIX,douyinpic.com,🏠 国内网站
+  - DOMAIN-SUFFIX,douyincdn.com,🏠 国内网站
+  - DOMAIN-SUFFIX,douyinstatic.com,🏠 国内网站
+  - DOMAIN-SUFFIX,bytedance.com,🏠 国内网站
+
+  # 头条系
+  - DOMAIN-SUFFIX,toutiao.com,🏠 国内网站
+  - DOMAIN-SUFFIX,ixigua.com,🏠 国内网站
+
+  # 搜索引擎
+  - DOMAIN-SUFFIX,so.com,🏠 国内网站
+  - DOMAIN-SUFFIX,sogou.com,🏠 国内网站
+  - DOMAIN-SUFFIX,soso.com,🏠 国内网站
+
+  # 视频平台
+  - DOMAIN-SUFFIX,iqiyi.com,🏠 国内网站
+  - DOMAIN-SUFFIX,youku.com,🏠 国内网站
+  - DOMAIN-SUFFIX,tudou.com,🏠 国内网站
+  - DOMAIN-SUFFIX,mgtv.com,🏠 国内网站
+
+  # 音乐平台
+  - DOMAIN-SUFFIX,music.163.com,🏠 国内网站
+  - DOMAIN-SUFFIX,kugou.com,🏠 国内网站
+  - DOMAIN-SUFFIX,kuwo.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,qqmusic.qq.com,🏠 国内网站
+
+  # 地图导航
+  - DOMAIN-SUFFIX,amap.com,🏠 国内网站
+  - DOMAIN-SUFFIX,autonavi.com,🏠 国内网站
+  - DOMAIN-SUFFIX,map.baidu.com,🏠 国内网站
+
+  # 出行服务
+  - DOMAIN-SUFFIX,12306.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,12306.com,🏠 国内网站
+  - DOMAIN-SUFFIX,didichuxing.com,🏠 国内网站
+  - DOMAIN-SUFFIX,didiglobal.com,🏠 国内网站
+  - DOMAIN-SUFFIX,xiaojukeji.com,🏠 国内网站
+
+  # 生活服务
+  - DOMAIN-SUFFIX,meituan.com,🏠 国内网站
+  - DOMAIN-SUFFIX,meituan.net,🏠 国内网站
+  - DOMAIN-SUFFIX,sankuai.com,🏠 国内网站
+  - DOMAIN-SUFFIX,dianping.com,🏠 国内网站
+  - DOMAIN-SUFFIX,58.com,🏠 国内网站
+  - DOMAIN-SUFFIX,anjuke.com,🏠 国内网站
+
+  # 新闻资讯
+  - DOMAIN-SUFFIX,sina.com.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,sohu.com,🏠 国内网站
+  - DOMAIN-SUFFIX,163.com,🏠 国内网站
+
+  # 金融服务
+  - DOMAIN-SUFFIX,bank.com.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,icbc.com.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,ccb.com,🏠 国内网站
+  - DOMAIN-SUFFIX,abchina.com,🏠 国内网站
+  - DOMAIN-SUFFIX,boc.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,bankcomm.com,🏠 国内网站
+  - DOMAIN-SUFFIX,cmbchina.com,🏠 国内网站
+  - DOMAIN-SUFFIX,cmbc.com.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,cib.com.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,spdb.com.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,cebbank.com,🏠 国内网站
+  - DOMAIN-SUFFIX,pingan.com,🏠 国内网站
+  - DOMAIN-SUFFIX,hxb.com.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,cgbchina.com.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,psbc.com,🏠 国内网站
+
+  # 通信运营商
+  - DOMAIN-SUFFIX,10086.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,chinamobile.com,🏠 国内网站
+  - DOMAIN-SUFFIX,10010.com,🏠 国内网站
+  - DOMAIN-SUFFIX,chinaunicom.com,🏠 国内网站
+  - DOMAIN-SUFFIX,10000.com,🏠 国内网站
+  - DOMAIN-SUFFIX,189.cn,🏠 国内网站
+  - DOMAIN-SUFFIX,chinatelecom.com.cn,🏠 国内网站
+
+  # 社交通讯
+  - DOMAIN-SUFFIX,tieba.baidu.com,🏠 国内网站
+  - DOMAIN-SUFFIX,qzone.qq.com,🏠 国内网站
+
+  # 国内CDN和云服务
+  - DOMAIN-SUFFIX,myqcloud.com,🏠 国内网站
+  - DOMAIN-SUFFIX,qpic.cn,🏠 国内网站
+
+  # === 地理位置规则 ===
+
+  # 中国大陆IP直连
+  - GEOIP,CN,🏠 国内网站
+
+  # === 最终规则 ===
+  - MATCH,🐟 Final
+
+# ===== 🚀 高级功能扩展配置 =====
+
+# === 脚本提供者配置 - 去广告和会员解锁 ===
+script-providers:
+  # === 📺 视频平台去广告和会员解锁 ===
+  
+  # YouTube去广告脚本
+  youtube-response:
+    url: "https://raw.githubusercontent.com/Maasea/sgmodule/master/Script/Youtube/youtube.response.js"
+    interval: 86400
+
+  # B站去广告和会员解锁
+  bilibili-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/BiliBili.js"
+    interval: 86400
+
+  # 爱奇艺去广告和会员解锁
+  iqiyi-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/iQIYI.js"
+    interval: 86400
+
+  # 腾讯视频去广告和会员解锁
+  tencent-video-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/TencentVideo.js"
+    interval: 86400
+
+  # 优酷去广告和会员解锁
+  youku-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/YouKu.js"
+    interval: 86400
+
+  # Netflix会员解锁
+  netflix-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/Netflix_rating.js"
+    interval: 86400
+
+  # Disney+会员解锁
+  disney-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/Disney.js"
+    interval: 86400
+
+  # HBO Max会员解锁
+  hbomax-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/HBO.js"
+    interval: 86400
+
+  # === 🎵 音乐平台会员解锁 ===
+  
+  # Spotify会员脚本
+  spotify-premium:
+    url: "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-proto.js"
+    interval: 86400
+
+  # Apple Music会员解锁
+  apple-music-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/AppleMusic.js"
+    interval: 86400
+
+  # QQ音乐会员解锁
+  qqmusic-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/QQMusic.js"
+    interval: 86400
+
+  # 网易云音乐会员解锁
+  netease-music-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/NetEaseMusic.js"
+    interval: 86400
+
+  # Pandora音乐解锁
+  pandora-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/Pandora.js"
+    interval: 86400
+
+  # === 🎨 图片和设计工具会员解锁 ===
+  
+  # Adobe Lightroom
+  lightroom-unlock:
+    url: "https://raw.githubusercontent.com/litieyin/AD_VIP/main/Script/lightroom.js"
+    interval: 86400
+
+  # Adobe Photoshop解锁
+  photoshop-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/Adobe.js"
+    interval: 86400
+
+  # === 📱 社交和通讯应用去广告 ===
+  
+  # 微信去广告
+  wechat-ads:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/QuantumultX/File/Wechat.js"
+    interval: 86400
+
+  # 微博去广告
+  weibo-ads:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/Weibo.js"
+    interval: 86400
+
+  # 知乎去广告
+  zhihu-ads:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/Zhihu.js"
+    interval: 86400
+
+  # 小红书去广告
+  xiaohongshu-ads:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/XiaoHongShu.js"
+    interval: 86400
+
+  # === 🎮 游戏和应用会员解锁 ===
+  
+  # Peak脑力训练
+  peak-pro:
+    url: "https://raw.githubusercontent.com/deezertidal/shadowrocket-rules/main/js/peak.js"
+    interval: 86400
+
+  # TikTok解锁脚本
+  tiktok-unlock:
+    url: "https://raw.githubusercontent.com/Tartarus2014/Script/master/jd_price_detect.js"
+    interval: 86400
+
+  # === 🛒 购物平台去广告 ===
+  
+  # 京东去广告
+  jd-ads:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/JD.js"
+    interval: 86400
+
+  # 淘宝去广告
+  taobao-ads:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/Taobao.js"
+    interval: 86400
+
+  # === 📚 阅读和学习应用会员解锁 ===
+  
+  # 得到会员解锁
+  dedao-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/Dedao.js"
+    interval: 86400
+
+  # 喜马拉雅会员解锁
+  ximalaya-unlock:
+    url: "https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/XiMaLaYa.js"
+    interval: 86400
+
+# === MITM 配置 ===
+mitm:
+  ca-passphrase: "Stash"
+  ca-p12: ""
+  enable: true
+  h2: true
+  skip-server-cert-verify: false
+
+# === HTTP 配置 - 去广告和会员解锁 ===
+http:
+  mitm:
+    # === 📺 视频平台 ===
+    
+    # YouTube相关域名
+    - "-redirector*.googlevideo.com"
+    - "*.googlevideo.com"
+    - "www.youtube.com"
+    - "s.youtube.com"
+    - "youtubei.googleapis.com"
+
+    # B站相关域名
+    - "*.bilibili.com"
+    - "*.biliapi.net"
+    - "*.hdslb.com"
+    - "api.bilibili.com"
+    - "api.vc.bilibili.com"
+    - "app.bilibili.com"
+
+    # 爱奇艺相关域名
+    - "*.iqiyi.com"
+    - "*.iqiyipic.com"
+    - "api.iqiyi.com"
+    - "ifacelb.iqiyi.com"
+
+    # 腾讯视频相关域名
+    - "*.v.qq.com"
+    - "*.qq.com"
+    - "v.qq.com"
+    - "vv.video.qq.com"
+
+    # 优酷相关域名
+    - "*.youku.com"
+    - "*.ykimg.com"
+    - "api.youku.com"
+
+    # Netflix相关域名
+    - "*.netflix.com"
+    - "*.nflximg.com"
+    - "*.nflxext.com"
+    - "*.nflxso.net"
+    - "*.nflxvideo.net"
+
+    # Disney+相关域名
+    - "*.disneyplus.com"
+    - "*.disney-plus.net"
+    - "*.disneystreaming.com"
+    - "*.dssott.com"
+
+    # HBO Max相关域名
+    - "*.hbomax.com"
+    - "*.hbo.com"
+    - "*.hbonow.com"
+
+    # === 🎵 音乐平台 ===
+    
+    # Spotify相关域名
+    - "spclient.wg.spotify.com"
+    - "*.spotify.com"
+    - "api.spotify.com"
+
+    # Apple Music相关域名
+    - "*.music.apple.com"
+    - "*.itunes.apple.com"
+    - "api.music.apple.com"
+
+    # QQ音乐相关域名
+    - "*.qq.com"
+    - "*.qzone.qq.com"
+    - "y.qq.com"
+    - "c.y.qq.com"
+
+    # 网易云音乐相关域名
+    - "*.music.163.com"
+    - "*.api.music.163.com"
+    - "*.interface.music.163.com"
+
+    # Pandora相关域名
+    - "www.pandora.com"
+    - "tuner.pandora.com"
+    - "api.pandora.com"
+    - "access.pandora.com"
+    - "audio.pandora.com"
+    - "audio-dc.pandora.com"
+    - "audio-sjl.pandora.com"
+    - "audio-sv5.pandora.com"
+
+    # === 🎨 图片和设计工具 ===
+    
+    # Adobe相关域名
+    - "photos.adobe.io"
+    - "*.adobe.com"
+    - "*.adobelogin.com"
+    - "cc-api-data.adobe.io"
+
+    # === 📱 社交和通讯应用 ===
+    
+    # 微信相关域名
+    - "mp.weixin.qq.com"
+    - "weixin110.qq.com"
+    - "security.wechat.com"
+    - "*.weixin.qq.com"
+
+    # 微博相关域名
+    - "*.weibo.com"
+    - "*.weibo.cn"
+    - "api.weibo.com"
+
+    # 知乎相关域名
+    - "*.zhihu.com"
+    - "api.zhihu.com"
+    - "*.zhimg.com"
+
+    # 小红书相关域名
+    - "*.xiaohongshu.com"
+    - "*.xhscdn.com"
+    - "api.xiaohongshu.com"
+
+    # === 🎮 游戏和应用 ===
+    
+    # Peak相关域名
+    - "billing.peakcloud.org"
+
+    # TikTok相关域名
+    - "*.tiktokv.com"
+    - "*.byteoversea.com"
+    - "*.tik-tokapi.com"
+    - "*.tiktok.com"
+
+    # === 🛒 购物平台 ===
+    
+    # 京东相关域名
+    - "*.jd.com"
+    - "*.jd.hk"
+    - "api.m.jd.com"
+    - "*.360buyimg.com"
+
+    # 淘宝相关域名
+    - "*.taobao.com"
+    - "*.tmall.com"
+    - "*.alicdn.com"
+
+    # === 📚 阅读和学习应用 ===
+    
+    # 得到相关域名
+    - "*.igetget.com"
+    - "api.igetget.com"
+
+    # 喜马拉雅相关域名
+    - "*.ximalaya.com"
+    - "*.xmcdn.com"
+    - "api.ximalaya.com"
+
+  script:
+    # === 📺 视频平台去广告和会员解锁 ===
+    
+    # YouTube去广告脚本
+    - match: ^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch)
+      name: youtube-response
+      type: response
+      require-body: true
+      binary-mode: true
+      timeout: 10
+
+    # B站去广告和会员解锁
+    - match: ^https?:\/\/api\.bilibili\.com\/x\/vip\/user\/info
+      name: bilibili-unlock
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/api\.bilibili\.com\/x\/vip\/.*
+      name: bilibili-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # 爱奇艺去广告和会员解锁
+    - match: ^https?:\/\/.*\.iqiyi\.com\/.*\/vip
+      name: iqiyi-unlock
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/api\.iqiyi\.com\/.*\/user\/info
+      name: iqiyi-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # 腾讯视频去广告和会员解锁
+    - match: ^https?:\/\/v\.qq\.com\/.*\/vip
+      name: tencent-video-unlock
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/.*\.qq\.com\/.*\/user\/vip
+      name: tencent-video-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # 优酷去广告和会员解锁
+    - match: ^https?:\/\/.*\.youku\.com\/.*\/vip
+      name: youku-unlock
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/api\.youku\.com\/.*\/user\/info
+      name: youku-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # Netflix会员解锁
+    - match: ^https?:\/\/.*\.netflix\.com\/.*\/user\/info
+      name: netflix-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # Disney+会员解锁
+    - match: ^https?:\/\/.*\.disneyplus\.com\/.*\/user\/info
+      name: disney-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # HBO Max会员解锁
+    - match: ^https?:\/\/.*\.hbomax\.com\/.*\/user\/info
+      name: hbomax-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # === 🎵 音乐平台会员解锁 ===
+    
+    # Spotify会员脚本
+    - match: ^https:\/\/spclient\.wg\.spotify\.com\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$
+      name: spotify-premium
+      type: response
+      require-body: true
+      binary-mode: true
+      timeout: 10
+
+    # Apple Music会员解锁
+    - match: ^https?:\/\/api\.music\.apple\.com\/.*\/user\/info
+      name: apple-music-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # QQ音乐会员解锁
+    - match: ^https?:\/\/.*\.qq\.com\/.*\/music\/vip
+      name: qqmusic-unlock
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/c\.y\.qq\.com\/.*\/user\/vip
+      name: qqmusic-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # 网易云音乐会员解锁
+    - match: ^https?:\/\/.*\.music\.163\.com\/.*\/user\/vip
+      name: netease-music-unlock
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/api\.music\.163\.com\/.*\/vip
+      name: netease-music-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # Pandora音乐解锁
+    - match: ^https:\/\/tuner\.pandora\.com\/tune
+      name: pandora-unlock
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https:\/\/api\.pandora\.com\/(v\d\/)?user\/getCanListen
+      name: pandora-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # === 🎨 图片和设计工具会员解锁 ===
+    
+    # Adobe Lightroom
+    - match: ^https:\/\/photos\.adobe\.io\/v2\/accounts
+      name: lightroom-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # Adobe Photoshop解锁
+    - match: ^https:\/\/cc-api-data\.adobe\.io\/.*\/user\/info
+      name: photoshop-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # === 📱 社交和通讯应用去广告 ===
+    
+    # 微信去广告
+    - match: ^https?:\/\/mp\.weixin\.qq\.com\/mp\/getappmsgext
+      name: wechat-ads
+      type: response
+      require-body: true
+      timeout: 10
+
+    # 微博去广告
+    - match: ^https?:\/\/api\.weibo\.com\/.*\/ad
+      name: weibo-ads
+      type: response
+      require-body: true
+      timeout: 10
+
+    # 知乎去广告
+    - match: ^https?:\/\/api\.zhihu\.com\/.*\/ad
+      name: zhihu-ads
+      type: response
+      require-body: true
+      timeout: 10
+
+    # 小红书去广告
+    - match: ^https?:\/\/api\.xiaohongshu\.com\/.*\/ad
+      name: xiaohongshu-ads
+      type: response
+      require-body: true
+      timeout: 10
+
+    # === 🎮 游戏和应用会员解锁 ===
+    
+    # Peak脑力训练
+    - match: ^https:\/\/billing\.peakcloud\.org\/billing\/2\/user\/me
+      name: peak-pro
+      type: response
+      require-body: true
+      timeout: 10
+
+    # TikTok解锁
+    - match: ^https?:\/\/.+\.(tiktokv|byteoversea)\.(com|net)\/aweme\/v\d\/(feed|mix\/aweme|aweme\/post|(multi\/)?aweme\/detail|follow\/feed|nearby\/feed|search\/item|general\/search\/single|hot\/search\/video\/list|aweme\/favorite)
+      name: tiktok-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # === 🛒 购物平台去广告 ===
+    
+    # 京东去广告
+    - match: ^https?:\/\/api\.m\.jd\.com\/.*\/ad
+      name: jd-ads
+      type: response
+      require-body: true
+      timeout: 10
+
+    # 淘宝去广告
+    - match: ^https?:\/\/.*\.taobao\.com\/.*\/ad
+      name: taobao-ads
+      type: response
+      require-body: true
+      timeout: 10
+
+    # === 📚 阅读和学习应用会员解锁 ===
+    
+    # 得到会员解锁
+    - match: ^https?:\/\/api\.igetget\.com\/.*\/user\/vip
+      name: dedao-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+    # 喜马拉雅会员解锁
+    - match: ^https?:\/\/api\.ximalaya\.com\/.*\/user\/vip
+      name: ximalaya-unlock
+      type: response
+      require-body: true
+      timeout: 10
+
+  rewrite:
+    # === 📺 视频平台去广告重写 ===
+    
+    # YouTube去广告重写
+    - (^https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+?)&ctier=L(&.+?),ctier,(.+) $1$2$3 302
+    - ^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback\?)).+&oad - reject-200
+    - ^https?:\/\/(www|s)\.youtube\.com\/api\/stats\/ads - reject-200
+    - ^https?:\/\/(www|s)\.youtube\.com\/(pagead|ptracking) - reject-200
+    - ^https?:\/\/s\.youtube\.com\/api\/stats\/qoe\?adcontext - reject-200
+
+    # B站去广告
+    - ^https?:\/\/.*\.bilibili\.com\/.*\/ad - reject-200
+    - ^https?:\/\/.*\.bilibili\.com\/.*\/banner - reject-200
+
+    # 爱奇艺去广告
+    - ^https?:\/\/.*\.iqiyi\.com\/.*\/ad - reject-200
+    - ^https?:\/\/.*\.iqiyi\.com\/.*\/advertisement - reject-200
+
+    # 腾讯视频去广告
+    - ^https?:\/\/.*\.qq\.com\/.*\/ad - reject-200
+    - ^https?:\/\/v\.qq\.com\/.*\/ad - reject-200
+
+    # 优酷去广告
+    - ^https?:\/\/.*\.youku\.com\/.*\/ad - reject-200
+
+    # === 📱 社交应用去广告重写 ===
+    
+    # 微博去广告
+    - ^https?:\/\/.*\.weibo\.com\/.*\/ad - reject-200
+    - ^https?:\/\/api\.weibo\.com\/.*\/ad - reject-200
+
+    # 知乎去广告
+    - ^https?:\/\/.*\.zhihu\.com\/.*\/ad - reject-200
+    - ^https?:\/\/api\.zhihu\.com\/.*\/ad - reject-200
+
+    # 小红书去广告
+    - ^https?:\/\/.*\.xiaohongshu\.com\/.*\/ad - reject-200
+    - ^https?:\/\/api\.xiaohongshu\.com\/.*\/ad - reject-200
+
+    # === 🛒 购物平台去广告重写 ===
+    
+    # 京东去广告
+    - ^https?:\/\/.*\.jd\.com\/.*\/ad - reject-200
+    - ^https?:\/\/api\.m\.jd\.com\/.*\/ad - reject-200
+
+    # 淘宝去广告
+    - ^https?:\/\/.*\.taobao\.com\/.*\/ad - reject-200
+    - ^https?:\/\/.*\.tmall\.com\/.*\/ad - reject-200
+
+    # === 🎵 音乐平台去广告重写 ===
+    
+    # QQ音乐去广告
+    - ^https?:\/\/.*\.qq\.com\/.*\/music\/ad - reject-200
+
+    # 网易云音乐去广告
+    - ^https?:\/\/.*\.music\.163\.com\/.*\/ad - reject-200
+
+# 📝 高级功能开关 - 网络速度优化
+experimental:
+  ignore-resolve-fail: true    # 忽略DNS解析失败，提升连接速度
+  sniff-tls-sni: true         # TLS SNI嗅探，智能路由
+  sniff-http-host: true       # HTTP Host嗅探，精确分流
+  trace: false                # 关闭追踪，减少开销
+  tcp-fast-open: true         # 启用TCP快速打开，加速连接
+  udp-fragment: true          # 启用UDP分片，优化传输
+
+# 🌐 TUN模式配置 (高级用户)
+tun:
+  enable: false              # 默认关闭，需要时开启
+  stack: system             # 协议栈模式
+  dns-hijack:               # DNS劫持优化
+    - 198.18.0.2:53
+  auto-route: true          # 自动路由
+  auto-detect-interface: true # 自动检测接口
+
+# 📊 性能监控
+profile:
+  store-selected: true      # 存储选择的代理
+  store-fake-ip: false     # 不存储fake-ip
+
+# ⚡ 系统优化 - 网络速度提升
+interface-name: ""          # 绑定网络接口
+routing-mark: 6666         # 路由标记
+auto-redir: false          # 自动重定向
+ebpf:
+  redirect-to-tun:
+    - eth0
+    - wlan0
+
+# 🚀 网络性能优化说明
+# 已通过以下方式优化网络速度：
+# 1. DNS优化：使用最快的DNS服务器，启用缓存
+# 2. 测速优化：降低测速间隔和超时时间，启用lazy模式
+# 3. 连接优化：启用TCP并发、快速打开、UDP分片
+# 4. 流量嗅探：智能路由，精确分流
